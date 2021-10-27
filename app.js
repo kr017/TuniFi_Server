@@ -7,7 +7,6 @@ const cors = require("cors");
 
 const productsRouter = require("./routes/product");
 const usersRouter = require("./routes/user");
-const wishlistsRouter = require("./routes/wishlist");
 const cartsRouter = require("./routes/cart");
 const addressRouter = require("./routes/address");
 
@@ -24,15 +23,15 @@ app.use(
   })
 );
 app.use("/product", productsRouter);
-app.use("/wishlist", wishlistsRouter);
+
 app.use("/cart", cartsRouter);
 app.use("/address", addressRouter);
 
 app.use("/user", usersRouter);
-app.use('/',express.static(path.join(__dirname, 'website')));
+app.use("/", express.static(path.join(__dirname, "website")));
 
-app.get('/*', function (req, res) {
-  res.sendFile(path.join(__dirname, 'website', 'index.html'));
+app.get("/*", function (req, res) {
+  res.sendFile(path.join(__dirname, "website", "index.html"));
 });
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

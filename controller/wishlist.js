@@ -1,9 +1,9 @@
-const Wishlist = require("../models/wishlist");
+const Wishlist = require("../models/liked");
 const User = require("../models/user");
 const Product = require("../models/product");
 const moment = require("moment");
 module.exports = {
-  addProductToWishlist: async (req, res) => {
+  likeSong: async (req, res) => {
     try {
       let userId = req.user._id;
       let wishlist = await Wishlist.findOne({ userId });
@@ -53,76 +53,76 @@ module.exports = {
       });
     }
   },
-  removeProductFromWishlist: async (req, res) => {
-    try {
-      let userId = req.user._id;
-      let wishlist = await Wishlist.findOne({ userId });
-      let productId = req.body._id;
+  // removeProductFromWishlist: async (req, res) => {
+  //   try {
+  //     let userId = req.user._id;
+  //     let wishlist = await Wishlist.findOne({ userId });
+  //     let productId = req.body._id;
 
-      let products = [];
+  //     let products = [];
 
-      if (wishlist) {
-        let products = wishlist.products;
-        let index = products.findIndex(item => item._id === productId);
+  //     if (wishlist) {
+  //       let products = wishlist.products;
+  //       let index = products.findIndex(item => item._id === productId);
 
-        products.splice(index, 1);
+  //       products.splice(index, 1);
 
-        await Wishlist.findByIdAndUpdate(
-          wishlist._id,
-          {
-            userId: userId,
-            products: products,
-            address: req.body.address,
-          },
-          { new: true }
-        );
+  //       await Wishlist.findByIdAndUpdate(
+  //         wishlist._id,
+  //         {
+  //           userId: userId,
+  //           products: products,
+  //           address: req.body.address,
+  //         },
+  //         { new: true }
+  //       );
 
-        res.json({
-          status: "success",
-          message: "wishlist updated successfully",
-          data: products,
-        });
-      } else {
-        res.status(400).json({
-          message: "Failed to find wishlist",
-        });
-      }
-    } catch (err) {
-      res.status(400).json({
-        message: (err && err.message) || "Failed to get product details",
-      });
-    }
-  },
-  getProductsFromWishlist: async (req, res) => {
-    try {
-      let userId = req.user._id;
-      let wishlist = await Wishlist.findOne({ userId });
+  //       res.json({
+  //         status: "success",
+  //         message: "wishlist updated successfully",
+  //         data: products,
+  //       });
+  //     } else {
+  //       res.status(400).json({
+  //         message: "Failed to find wishlist",
+  //       });
+  //     }
+  //   } catch (err) {
+  //     res.status(400).json({
+  //       message: (err && err.message) || "Failed to get product details",
+  //     });
+  //   }
+  // },
+  // getProductsFromWishlist: async (req, res) => {
+  //   try {
+  //     let userId = req.user._id;
+  //     let wishlist = await Wishlist.findOne({ userId });
 
-      if (wishlist) {
-        let products = wishlist.products;
-        let productsInWishList = [];
-        for (let i = 0; i < products.length; i++) {
-          const product = await Product.findById({
-            _id: products[i]._id,
-          });
-          productsInWishList.push(product);
-        }
-        wishlist = {
-          _id: wishlist._id,
-          modifiedOn: wishlist.modifiedOn,
-          products: productsInWishList,
-          userId: wishlist.userId,
-        };
-      }
-      res.json({
-        status: "success",
-        message: "User Wishlist",
-        data: wishlist,
-      });
-    } catch (err) {
-      res.status(400).json({
-        message: (err && err.message) || "Failed to get products",
-      });
-    }
-  },
+  //     if (wishlist) {
+  //       let products = wishlist.products;
+  //       let productsInWishList = [];
+  //       for (let i = 0; i < products.length; i++) {
+  //         const product = await Product.findById({
+  //           _id: products[i]._id,
+  //         });
+  //         productsInWishList.push(product);
+  //       }
+  //       wishlist = {
+  //         _id: wishlist._id,
+  //         modifiedOn: wishlist.modifiedOn,
+  //         products: productsInWishList,
+  //         userId: wishlist.userId,
+  //       };
+  //     }
+  //     res.json({
+  //       status: "success",
+  //       message: "User Wishlist",
+  //       data: wishlist,
+  //     });
+  //   } catch (err) {
+  //     res.status(400).json({
+  //       message: (err && err.message) || "Failed to get products",
+  //     });
+  //   }
+  // },
 };
